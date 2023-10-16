@@ -1,0 +1,122 @@
+{% extends "layout.html" %}
+
+{% block content1 %}
+   
+<div class="row">
+   <div class="col-md-8 mx-auto">
+      {% set m = get_flashed_messages(with_categories=True) %}
+      {% if m: %}
+      {% for cat,msg in m %}
+      {% if cat =="error" %}
+      <div class="alert alert-danger">{{ msg }}</div>
+      {% else %}
+      <div class="alert alert-info">{{ msg }}</div>
+      {% endif %}
+      {% endfor %}
+      {% endif %}
+      <h2 class="text-center">Create an account with us</h2>
+      <p class="text-center">All fields are required <span style="color: red;">*</span></p>
+      {% if sign.username.errors or sign.email.errors or sign.conpwd.errors %}
+      <div class="alert alert-danger">
+         {% for i in sign.username.errors %}
+         <p>{{ i }}</p>
+        {% endfor %}
+
+         {% for i in sign.email.errors %}
+         <p>{{ i }}</p>
+         {% endfor %}
+
+         {% for i in sign.conpwd.errors %}
+         <p>{{ i }}</p>
+         {% endfor %}
+      </div>
+
+      {% endif %} 
+
+      <form action="" method="POST" enctype="multipart/form-data" novalidate>
+         <div class="mb-1">
+            {{ sign.username.label }}
+            {{ sign.username(class_="uname form-control",style="font-family:arial; color:black") }}
+         </div>
+
+         <div class="mb-1">
+            {{ sign.fname.label }}
+            {{ sign.fname(class_="form-control",style="font-family:arial; color:black") }}
+         </div>
+
+         <div class="mb-1">
+            {{ sign.lname.label }}
+            {{ sign.lname(class_="form-control",style="font-family:arial; color:black") }}
+         </div>
+
+         <div class="mb-1">
+            {{ sign.phoneno.label }}
+            {{ sign.phoneno(class_="form-control",style="font-family:arial; color:black") }}
+         </div>
+         
+         <div class="mb-1">
+            {{ sign.email.label }}
+            
+            {#{% for i in sign.email.errors %}#}
+            <span style="color:red;">{{ i }}</span>
+         
+            {#{% endfor %}#}
+            
+            {{ sign.email(class_="email form-control") }}
+         </div>
+         <div class="mb-1">
+            {{ sign.pwd.label }}
+            {{ sign.pwd(class_="form-control") }}
+         </div>
+         <div class="mb-1">
+            {{ sign.conpwd.label }}
+            {{ sign.conpwd(class_="form-control") }}
+         </div>
+         <div class="mb-4">
+            {{ sign.profile.label }}
+            {{ sign.profile(class_="form-control") }}
+         </div>
+         <div class="mb-4">
+            {{ sign.csrf_token }}
+            {{ sign.btnsubmit(class_="btn btn-outline-danger col-12") }}
+         </div>
+      </form>
+      
+      </div>
+   </div>
+
+   <div class="mt-3" id="avail"></div>
+   
+{% endblock %}
+
+{% block customjs %}    
+<script>
+   $(document).ready(function(){
+      $('.btn').click(function(){
+         username = $('.uname').val()
+         csrf = $('#csrf_token').val()
+         data= { "fullname": username, "csrf_token": csrf }
+         $('#avail').load('/checkusername/',data,function(){
+            (this).addClass('text-danger')
+         })
+
+      })
+   })
+</script>
+
+<script>
+   $(document).ready(function () {
+      $('.btn').click(function () {
+         email = $('.email').val()
+         csrf = $('#csrf_token').val()
+         data = { "fullname": email, "csrf_token": csrf }
+         $('#avail').load('/checkemail/', data, function () {
+            (this).addClass('text-danger')
+         })
+
+      })
+   })
+</script>
+
+
+{% endblock %}

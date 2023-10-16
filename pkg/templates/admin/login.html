@@ -1,0 +1,34 @@
+{% extends 'admin/admin_layout.html' %}
+
+{% block content %}
+<div class="row" style="height: 500px;">
+   <div class="col-md-6 mx-auto">
+      <h1 class="h3 mb-3 text-center">CrowdHelp <br> Please sign in as an Admin</h1>
+      {% set m = get_flashed_messages(with_categories=True) %}
+      {% if m: %}
+      {% for cat,msg in m %}
+      {% if cat =="error" %}
+      <div class="alert alert-danger">{{ msg }}</div>
+      {% else %}
+      <div class="alert alert-info">{{ msg }}</div>
+      {% endif %}
+      {% endfor %}
+      {% endif %}
+      <form action="" method="post">
+         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+         <div class="mb-3 mt-3">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" class="form-control">
+         </div>
+
+         <div class="mb-3">
+            <label for="pwd">Password</label>
+            <input type="password" name="pwd" id="pwd" class="form-control">
+         </div>
+
+         <button class="btn btn-outline-danger col-12 mb-3">Log In</button>
+      </form>
+   </div>
+</div>
+
+{% endblock %}

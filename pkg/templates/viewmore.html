@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block content1 %}
+<div class="row">
+   
+   <div class="col-md-6 mx-auto">
+      
+
+     
+      <h2 class="text-center">Project Author: {{ project.projectsby.user_name}} </h2>
+      <h2 class="text-center"> {{ project.project_name}} </h2>
+      <img src="/static/projects/{{ project.project_image }}" class="img-fluid bk mb-3" alt=""
+            style="height: 400px; width: 100%; display: block;">
+      <p style="font-size: 1.5em;"> {{ project.project_description }}</p>
+      <p style="font-size: 1.5em;"> &#8358 {{ project.project_amt }}</p>
+      <p style="font-size: 1.5em;"> Total amount raised: &#8358 {{ don }}</p>
+
+      <a  href="{{ url_for('donation',id=project.project_id)}}" class="btn btn-danger col-12">Donate</a>
+      
+   </div>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'admin/admin_layout.html'%}
+
+{% block content %}
+<div class="row">
+   <div class="content col mx-auto" style="background-color: white; padding:3em">
+      <div class="row">
+
+         {% set m = get_flashed_messages(with_categories=True) %}
+         {% if m: %}
+         {% for cat,msg in m %}
+         {% if cat =="error" %}
+         <div class="alert alert-danger">{{ msg }}</div>
+         {% else %}
+         <div class="alert alert-info">{{ msg }}</div>
+         {% endif %}
+         {% endfor %}
+         {% endif %}
+         <div class="col" style="display: block;">
+            {% if user %}
+            <table class="table table-bordered table-responsiveness table-striped">
+               <thead>
+                  <tr>
+                     <th scope="col">S/N</th>
+                     <th scope="col">Username</th>
+                     <th scope="col">Profile Picture</th>
+                     
+                     <th scope="col">Date Registered</th>
+                     <th scope="col">Action</th>
+                     
+
+                  </tr>
+               </thead>
+               <tbody>
+                  {% for user in user %}
+                  
+                  <tr>
+                     <th scope="row">{{ loop.index }}</th>
+                     <td>{{ user.user_name }}</td>
+                     <td><img src="/static/profiles/{{ user.user_profilepic }}" height="100" width="100"
+                           title="{{ user.user_name}}"></td>
+                    
+                     
+                     
+                     <td>{{ user.user_datereg }}</td>
+                     <td> <a href="{{url_for('delete_user',id=user.user_id)}}"
+                           class="btn btn-sm btn-danger">Delete</a></td>
+
+                  </tr>
+                  
+                  {% endfor %}
+
+               </tbody>
+            </table>
+
+            {% endif %}
+         </div>
+
+
+
+
+      </div>
+
+   </div>
+</div>
+
+<div class="row">
+   <div class="col">
+      <h2 class="text-center">Total number of users: {{ user|count }} </h2>
+   </div>
+</div>
+{% endblock %}

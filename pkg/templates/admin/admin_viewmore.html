@@ -1,0 +1,38 @@
+{% extends 'admin/admin_layout.html' %}
+
+{% block content %}
+<div class="row">
+   <div class="col-md-6 mx-auto">
+
+      <h2 class="text-center"> {{ project.project_name}} </h2>
+      <img src="/static/projects/{{ project.project_image }}" class="img-fluid bk mb-3" alt=""
+         style="height: 400px; width: 100%; display: block;">
+      <p style="font-size: 1.5em;"> {{ project.project_description }}</p>
+      <p style="font-size: 1.5em;">  &#8358 {{ project.project_amt }}</p>
+      <p style="font-size: 1.5em;"> Total amount raised: &#8358 {{ don }}</p>
+
+
+      <hr>
+      <h2>Message To All Admins</h2>
+      <p>Dear admin, you have been selected by the CrowdHelp team to publish projects that have been investigated by us, and to unpublish projects that have generated the required amount. You also required to fradulent projects.
+      </p>
+
+
+      
+      <form action="" method="post">
+         <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
+         <div class="mb-3">
+         <input type="radio" name="radio" id="unpublished" value="unpublished" class="form-check-input" {% if project.project_status =="unpublished"%}checked="checked"{% endif %}>
+         <label for="unpublished">Unpublish</label>
+         </div>
+         <div class="mb-3">
+         <input type="radio" name="radio" id="published" value="published" class="form-check-input" {% if project.project_status =="published"%}checked="checked"{% endif %}>
+         <label for="published">Publish</label>
+         </div>
+         <div class="mb-3">
+         <button type="submit" class="btn btn-outline-danger">Submit</button>
+         </div>
+      </form>
+   </div>
+</div>
+{% endblock %}

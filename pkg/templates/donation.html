@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block content1 %}
+   <div class="row">
+      <div class="col-md-6 mx-auto">
+         <div action="" method="post" novalidate>
+            <div class="content" style="background-color: white;padding:3em">
+               <h2>Donation Form: Thank You</h2>
+               <p>Kindly complete the form below with the amount you want to donate. Click on the button and it will take you to a page where you will be asked for your card details
+
+               </p>
+               <form action="" method="post" novalidate>
+            
+                  {{ donform.csrf_token }}
+            
+                  <div class="mb-3">
+                     {{ donform.fullname.label }}
+                     {{ donform.fullname(class_="form-control border-primary",value=userdeets.user_name) }}
+                  </div>
+            
+                  <div class="mb-3">
+                     {{ donform.email.label }}
+                     {{ donform.email(class_="form-control border-primary",value=userdeets.user_email) }}
+            
+                  </div>
+            
+                  <div class="mb-3">
+                     {{ donform.amt.label }}
+                     {{ donform.amt(class_="form-control border-primary") }}
+            
+                  </div>
+            
+                  <div class="mb-3">
+            
+                     {{ donform.btnsubmit(class_="btn btn-danger") }}
+            
+                  </div>
+            
+            
+               </form>
+            </div>
+         </div>
+      </div>
+{% endblock %}
+
+{% block customjs %}
+
+{% endblock %}

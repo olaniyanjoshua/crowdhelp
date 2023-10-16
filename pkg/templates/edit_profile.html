@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block content1 %}
+
+ 
+   <div class="content col-md-6 mx-auto" style="background-color: white;padding:3em">
+      <h3>Change Your Username</h3>
+      <form enctype="multipart/form-data" action="" method="post">
+         {{ pform.csrf_token() }}
+         {% if pform.username.errors %}
+   
+         <div class="alert alert-danger">{{ pform.username.errors }}</div>
+         {% endif %}
+         <div class="mb-3">
+            {{ pform.username.label }}
+            {{ pform.username(class_="form-control border-success", value=userdeets.user_name) }}
+         </div>
+   
+         <div class="mb-3">
+            {{ pform.btnsubmit(class_="btn btn-danger") }}
+   
+         </div>
+      </form>
+   </div>
+ 
+
+{% endblock %}

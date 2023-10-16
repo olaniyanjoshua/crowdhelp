@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+
+{% block content1 %}
+
+ <div class="row">
+<div class="content col-md-10 mx-auto" style="background-color: white; padding:3em; min-height: 400px;" >
+ <div class="row">
+  
+  
+   {% for i in user.user_projects %}
+   {% if i !="" %}
+  <div class="col">
+    <h2> {{ i.project_name }} </h2>
+   <a href="{{url_for('view_more',id=i.project_id)}}"><img src="/static/projects/{{ i.project_image }}" class="img-fluid bk" alt="" style="height: 200px; width: 200px; display: block;"></a>
+  <p style="font-size: 1.5em;"> {{ i.project_description }}</p>
+  <p style="font-size: 1.5em;"> &#8358 {{ i.project_amt }}</p>
+ 
+
+  <a  href="{{url_for('view_more',id=i.project_id)}}" class="btn btn-danger">View More </a>
+  </div>
+  {% else %}
+  <div class="col">
+    <h2>You have not created any project yet</h2>
+  </div>
+  {% endif %}
+   
+
+  {% endfor %}
+  
+    </div>
+      
+      </div>
+</div>
+      
+   
+   
+
+   
+   
+ 
+
+
+
+{% endblock %}
+
+{% block customjs %}
+
+
+{% endblock %}

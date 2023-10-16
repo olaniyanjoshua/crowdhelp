@@ -1,0 +1,91 @@
+{% extends 'layout.html' %}
+
+{% block content1 %}
+
+ <div class="row">
+<div class="content col-md-10 mx-auto" style="background-color: white; padding:3em">
+ <div class="row">
+  <form class="d-flex" role="search" action="/search" method="post">
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    <input class="form-control me-2" type="search" placeholder="Search a project by it's name" aria-label="Search" name="query" id="search-query">
+    <button class="btn btn-outline-danger" type="submit" disabled="disabled">Search</button>
+  </form>
+                                           
+            <ul id="search-results"></ul>
+                                    
+                                               
+  
+   {% if projects %}
+   {% for project in projects %}
+   {% if project.project_status=="published" %}
+  <div class="col">
+   
+   
+    <h2> {{ project.project_name}} </h2>
+   <a href="{{url_for('view_more',id=project.project_id)}}"><img src="/static/projects/{{ project.project_image }}" class="img-fluid bk" alt="" style="height: 200px; width: 60%; display: block;"></a>
+  <p style="font-size: 1.5em;"> {{ project.project_description}}</p>
+  <p style="font-size: 1.5em;"> &#8358 {{ project.project_amt}}</p>
+ 
+
+  <a  href="{{url_for('view_more',id=project.project_id)}}" class="btn btn-danger">View More </a>
+  </div>
+  {% endif %}
+   
+
+  {% endfor %}
+  {% endif %}
+    </div>
+      
+      </div>
+</div>
+      
+   
+   
+
+   
+   
+ 
+
+
+
+{% endblock %}
+
+{% block customjs %}
+<!-- <script type="text/javascript">
+    $(document).ready(function () {
+        $('#search-query').on('input',function(){
+            var search = $(this).val();
+            if(search.length>=2){
+                $.ajax({
+                    url: '/search',
+                    type: 'POST',
+                    data: {search:search},
+                    success: function(data){
+                        var results = $('#search-results');
+                        results.empty();
+                        $.each(data, function(projects, projects){
+                            results.append('<li>' + project + '</li>');
+                        });
+                    }
+
+                });
+                
+            } else {
+                $('#search-results').empty();
+            }
+        })
+    })
+</script> -->
+
+<script>
+    $(document).ready(function(){
+        $('#search-query').on('input change',function(){
+            if($(this).val()!=""){
+                $('button').prop('disabled',false);
+            } else {
+                $('button').prop('disabled',true);
+            }
+        });
+    })
+</script>
+{% endblock %}
