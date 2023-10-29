@@ -390,3 +390,7 @@ def change_password():
 def page_not_found(error):
    return render_template("error404.html",error=error),404
 
+@app.errorhandler(500)
+def server_error(error):
+   return render_template("error500.html",error=error),500
+
