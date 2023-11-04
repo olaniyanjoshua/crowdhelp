@@ -39,7 +39,7 @@ def donation(id):
       uid = session.get('user')
       userdeets = db.session.query(User).get(uid)
       #deets = db.session.query(User).get(session['user'])
-      return render_template("donation.html",donform=donform,userdeets=userdeets)
+      return render_template("user/donation.html",donform=donform,userdeets=userdeets)
    else:
       if donform.validate_on_submit():
          #retrieve form data
@@ -77,7 +77,7 @@ def donation(id):
          else:
             session['user'] = 0
             deets = db.session.query(User).get(session['user'])
-            return render_template("donation.html",donform=donform,userdeets=userdeets)
+            return render_template("user/donation.html",donform=donform,userdeets=userdeets)
          
 
 @app.route("/confirm_donation/",methods=["POST","GET"])
@@ -93,7 +93,7 @@ def confirm_donation():
    else:
       payment_deets = Payment.query.filter(Payment.payment_refno==session['crhelp']).first()
       #donation_deets = Payment.query.filter(Payment.payment_userid==session['crhelp']).first()
-      return render_template("donation_confirmation.html",payment_deets=payment_deets,userdeets=userdeets)
+      return render_template("user/donation_confirmation.html",payment_deets=payment_deets,userdeets=userdeets)
    
 
 @app.route("/initialize/paystack")
@@ -175,7 +175,7 @@ def create_project():
          flash("Your project has been successfully created")
          return redirect(url_for('create_project'))
       else:
-         return render_template('create_project.html',proj=proj,userdeets=userdeets,pagename="Create A Project")
+         return render_template('user/create_project.html',proj=proj,userdeets=userdeets,pagename="Create A Project")
 
 
 @app.route('/checkusername/',methods=["POST","GET"])
@@ -207,7 +207,7 @@ def projects():
    id = session.get('user')
    userdeets = User.query.get(id)
    projects = db.session.query(Project).all()
-   return render_template('projects.html',projects=projects,userdeets=userdeets)
+   return render_template('user/projects.html',projects=projects,userdeets=userdeets)
 
 
 @app.route('/search/', methods=['POST','GET'])
@@ -220,7 +220,7 @@ def search():
            flash("Record found")
         else:
            flash("Record not found")
-        return render_template("search.html",results=results)
+        return render_template("user/search.html",results=results)
        
 
 
@@ -232,18 +232,19 @@ def view_more(id):
    project = Project.query.get_or_404(id)
    status = Project.query.get(id)
    if status:
-        payments = Payment.query.filter_by(payment_projectid=id, payment_status='paid').all()
+       payments = db.session.query(Payment).filter(Payment.payment_projectid == id, Payment.payment_status == 'paid').all()
+        #payments = Payment.query.filter_by(payment_projectid=id, payment_status='paid').all()
 
-        don = sum(payment.payment_amtpaid for payment in payments)/100
+       don = sum(payment.payment_amtpaid for payment in payments)/100
    projects = db.session.query(Project).filter(Project.project_name).all()
-   return render_template("viewmore.html",project=project,userdeets=userdeets,projects=projects,don=don)
+   return render_template("user/viewmore.html",project=project,userdeets=userdeets,projects=projects,don=don)
 
 @app.route("/myprojects/")
 def myprojects():
    id = session['user']
    userdeets = User.query.get(id)
    user = db.session.query(User).get(id)
-   return render_template("myprojects.html",user=user,userdeets=userdeets)
+   return render_template("user/myprojects.html",user=user,userdeets=userdeets)
 
 @app.route("/changedp/",methods=["POST","GET"])
 @login_required
@@ -252,7 +253,7 @@ def changedp():
    userdeets = db.session.query(User).get(id)
    dpform = DpForm()
    if request.method =="GET":
-      return render_template("changedp.html",dpform=dpform,userdeets=userdeets)
+      return render_template("user/changedp.html",dpform=dpform,userdeets=userdeets)
    else:
       if dpform.validate_on_submit():
          pix = request.files.get('dp')
@@ -263,17 +264,17 @@ def changedp():
          flash("Profile picture updated")
          return redirect(url_for('dashboard'))
       else:
-         return render_template("changedp.html",dpform=dpform,userdeets=userdeets)
+         return render_template("user/changedp.html",dpform=dpform,userdeets=userdeets)
 
 @app.route("/",methods=["POST","GET"])
 def home():
-   return render_template("index.html")
+   return render_template("user/index.html")
 
 @app.route("/signup/",methods=["POST","GET"])
 def signup():
    sign = RegForm()
    if request.method == "GET":
-      return render_template("signup.html",sign=sign)
+      return render_template("user/signup.html",sign=sign)
    else:
          #retrieve file
          if sign.validate_on_submit():
@@ -307,13 +308,13 @@ def signup():
                flash("An account has been created for you. Please login.")
                return redirect('/login')
          else:
-            return render_template("signup.html",sign=sign)
+            return render_template("user/signup.html",sign=sign)
 
 
 @app.route("/login/",methods=["POST","GET"])
 def login():
    if request.method =="GET":
-      return  render_template("login.html")
+      return  render_template("user/login.html")
    else:
        username = request.form.get('username')
        pwd = request.form.get('pwd')
@@ -326,6 +327,10 @@ def login():
          else:
             flash("Invalid Credentials, try again")
             return redirect("/login")
+       else:
+            flash("Invalid Credentials, try again")
+            return redirect("/login")
+      
        
       
 
@@ -336,7 +341,7 @@ def dashboard():
       userdeets = User.query.get(id)
    # within dashboard display the persons name
       flash("You need to login to access this page")
-      return render_template("dashboard.html",userdeets=userdeets)
+      return render_template("user/dashboard.html",userdeets=userdeets)
    else:
       flash("You must be logged in to view this page")
       return redirect("/login")
@@ -364,7 +369,7 @@ def change_password():
    id = session.get('user')
    userdeets = User.query.get(id)
    if request.method =="GET":
-      return render_template("changepassword.html",userdeets=userdeets)
+      return render_template("user/changepassword.html",userdeets=userdeets)
    else:
        username = request.form.get('username')
        pwd = request.form.get('pwd')
@@ -388,9 +393,9 @@ def change_password():
 #@app.route("/index/") These functions are controller
 @app.errorhandler(404)
 def page_not_found(error):
-   return render_template("error404.html",error=error),404
+   return render_template("user/error404.html",error=error),404
 
 @app.errorhandler(500)
 def server_error(error):
-   return render_template("error500.html",error=error),500
+   return render_template("user/error500.html",error=error),500
 
